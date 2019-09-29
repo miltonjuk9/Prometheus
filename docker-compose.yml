@@ -3,7 +3,7 @@ services:
     prometheus:
     image: linuxtips/prometheus_alpine
     volumes:
-      - ./prometheus/:/etc/prometheus/
+      - ./conf/prometheus/:/etc/prometheus/
       - prometheus_data:/var/lib/prometheus
     networks:
       - backend
