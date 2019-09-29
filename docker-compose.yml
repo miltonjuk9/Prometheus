@@ -1,50 +1,28 @@
-version: '3.3'
+version: '3'
 
 services:
+    prometheus:
+        image: prom/prometheus:latest
+        volumes:
+            - ./prometheus.yml:/etc/prometheus/prometheus.yml
+            - ./alert.rules:/etc/prometheus/alert.rules
+        command:
+            - '-config.file=/etc/prometheus/prometheus.yml'
+        ports:
+            - '9090:9090'
+        deploy:
+          placement:
+            constraints: [node.role == manager]
 
-  prometheus:
-    image: prom/prometheus:latest
-    container_name: prometheus
-    volumes:
-      - ./prometheus/:/etc/prometheus/
-      - prometheus_data:/prometheus
-    command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
-      - '--storage.tsdb.path=/prometheus'
-      - '--web.console.libraries=/etc/prometheus/console_libraries'
-      - '--web.console.templates=/etc/prometheus/consoles'
-      - '--storage.tsdb.retention=200h'
-      - '--web.enable-lifecycle'
-    # restart: unless-stopped
-    expose:
-      - 9090
-    ports:
-      - "9090:9090"
-    networks:
-      - frontend
+    node-exporter:
+        image: prom/node-exporter:latest
+        ports:
+            - '9100:9100'
+        deploy:
+          placement:
+            constraints: [node.role == manager]
 
-  nodeexporter:
-    image: prom/node-exporter:latest
-    container_name: nodeexporter
-    user: root
-    privileged: true
-    volumes:
-      - /proc:/host/proc:ro
-      - /sys:/host/sys:ro
-      - /:/rootfs:ro
-    command:
-      - '--path.procfs=/host/proc'
-      - '--path.sysfs=/host/sys'
-      - '--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc)($$|/)'
-    restart: unless-stopped
-    expose:
-      - 9100
-    ports:
-      - "9100:9100"      
-    networks:
-      - frontend
-
-  cadvisor-exporter:
+    cadvisor-exporter:
         container_name: "cadvisor-exporter"
         image: google/cadvisor
         ports:
@@ -54,3 +32,6 @@ services:
           - "/var/run:/var/run:rw"
           - "/sys:/sys:ro"
           - "/var/lib/docker/:/var/lib/docker:ro"
+        deploy:
+          placement:
+            constraints: [node.role == manager]
