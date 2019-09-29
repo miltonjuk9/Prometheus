@@ -2,7 +2,6 @@ version: '3'
 
 services:
     prometheus:
-        container_name: "prometheus"
         image: prom/prometheus:latest
         volumes:
             - ./prometheus.yml:/etc/prometheus/prometheus.yml
@@ -21,7 +20,6 @@ services:
             constraints: [node.role == manager]
 
     node-exporter:
-        container_name: "node-exporter"
         image: prom/node-exporter:latest
         ports:
             - '9100:9100'
@@ -35,7 +33,6 @@ services:
             constraints: [node.role == manager]
 
     cadvisor-exporter:
-        container_name: "cadvisor-exporter"
         image: google/cadvisor
         ports:
           - "9200:8080"
