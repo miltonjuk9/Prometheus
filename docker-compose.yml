@@ -9,9 +9,9 @@ services:
       - backend
     ports:
       - 9090:9090
-        deploy:
-          placement:
-            constraints: [node.role == manager]
+    deploy:
+      placement:
+        constraints: [node.role == manager]
 
     node-exporter:
     image: linuxtips/node-exporter_alpine
@@ -24,9 +24,9 @@ services:
       - backend
     ports:
       - 9100:9100
-        deploy:
-          placement:
-            constraints: [node.role == manager]
+    deploy:
+      placement:
+        constraints: [node.role == manager]
 
     cadvisor-exporter:
         container_name: "cadvisor-exporter"
