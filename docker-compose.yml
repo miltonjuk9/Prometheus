@@ -8,10 +8,8 @@ services:
         ports:
             - '9090:9090'
         volumes:
-          - "/:/rootfs:ro2"
-          - "/var/run:/var/run:rw2"
-          - "/sys:/sys:ro2"
-          - "/var/lib/docker/:/var/lib/docker:ro2"
+          - ./prometheus/:/etc/prometheus/
+          - prometheus_data:/prometheus
         deploy:
           placement:
             constraints: [node.role == manager]
