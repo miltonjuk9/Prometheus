@@ -10,6 +10,9 @@ services:
         volumes:
           - ./prometheus/:/etc/prometheus/
           prometheus_data:/var/lib/prometheus
+        deploy:
+          placement:
+            constraints: [node.role == manager]
 
     node-exporter:
         image: prom/node-exporter:latest
