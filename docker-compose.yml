@@ -2,6 +2,7 @@ version: '3'
 
 services:
     prometheus:
+        container_name: "prometheus"
         image: prom/prometheus:latest
         volumes:
             - ./prometheus.yml:/etc/prometheus/prometheus.yml
@@ -10,14 +11,25 @@ services:
             - '-config.file=/etc/prometheus/prometheus.yml'
         ports:
             - '9090:9090'
+        volumes:
+          - "/:/rootfs:ro2"
+          - "/var/run:/var/run:rw2"
+          - "/sys:/sys:ro2"
+          - "/var/lib/docker/:/var/lib/docker:ro2"
         deploy:
           placement:
             constraints: [node.role == manager]
 
     node-exporter:
+        container_name: "node-exporter"
         image: prom/node-exporter:latest
         ports:
             - '9100:9100'
+        volumes:
+          - "/:/rootfs:ro1"
+          - "/var/run:/var/run:rw1"
+          - "/sys:/sys:ro1"
+          - "/var/lib/docker/:/var/lib/docker:ro1"
         deploy:
           placement:
             constraints: [node.role == manager]
