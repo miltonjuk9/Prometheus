@@ -1,19 +1,28 @@
-version: '3'
+version: '3.3'
 services:
     prometheus:
-        image: prom/prometheus:0.18.0
-        volumes:
-            - ./prometheus.yml:/prometheus/prometheus.yml
-            - ./alert.rules:/prometheus/alert.rules
-        command:
-            - '-config.file=/prometheus/prometheus.yml'
-        ports:
-            - '9090:9090'
+    image: linuxtips/prometheus_alpine
+    volumes:
+      - ./conf/prometheus/:/etc/prometheus/
+      - prometheus_data:/var/lib/prometheus
+    networks:
+      - backend
+    ports:
+      - 9090:9090
 
-    node-exporter:
-        image: prom/node-exporter:0.12.0rc1
-        ports:
-            - '9100:9100'
+  node-exporter:
+    image: linuxtips/node-exporter_alpine
+    hostname: '{{.Node.ID}}'
+    volumes:
+      - /proc:/usr/proc
+      - /sys:/usr/sys
+      - /:/rootfs
+    deploy:
+      mode: global
+    networks:
+      - backend
+    ports:
+      - 9100:9100
 
     cadvisor-exporter:
         container_name: "cadvisor-exporter"
