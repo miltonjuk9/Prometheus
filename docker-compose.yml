@@ -2,13 +2,14 @@ version: '3'
 
 services:
     prometheus:
-        image: prom/prometheus:latest
+        image: prom/prometheus:stable
         command:
             - '-config.file=/etc/prometheus/prometheus.yml'
         ports:
             - '9090:9090'
         volumes:
-          - ./prometheus/:/etc/prometheus/
+            - ./prometheus.yml:/etc/prometheus/prometheus.yml
+            - ./alert.rules:/etc/prometheus/alert.rules
         deploy:
           placement:
             constraints: [node.role == manager]
