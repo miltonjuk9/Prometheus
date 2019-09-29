@@ -3,9 +3,6 @@ version: '3'
 services:
     prometheus:
         image: prom/prometheus:latest
-        volumes:
-            - ./prometheus.yml:/etc/prometheus/prometheus.yml
-            - ./alert.rules:/etc/prometheus/alert.rules
         command:
             - '-config.file=/etc/prometheus/prometheus.yml'
         ports:
