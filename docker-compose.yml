@@ -10,9 +10,6 @@ services:
         volumes:
             - ./prometheus.yml:/etc/prometheus/prometheus.yml
             - ./alert.rules:/etc/prometheus/alert.rules
-        deploy:
-          placement:
-            constraints: [node.role == manager]
 
     node-exporter:
         image: prom/node-exporter:latest
@@ -23,9 +20,6 @@ services:
           - "/var/run:/var/run:rw1"
           - "/sys:/sys:ro1"
           - "/var/lib/docker/:/var/lib/docker:ro1"
-        deploy:
-          placement:
-            constraints: [node.role == manager]
 
     cadvisor-exporter:
         image: google/cadvisor
@@ -36,6 +30,3 @@ services:
           - "/var/run:/var/run:rw"
           - "/sys:/sys:ro"
           - "/var/lib/docker/:/var/lib/docker:ro"
-        deploy:
-          placement:
-            constraints: [node.role == manager]
